@@ -29,11 +29,14 @@ app.use('/api/project', projectRouter);
 app.use('/api/changes', changesRouter);
 app.use('/api/ppt', pptRouter);
 app.use('/api/team', teamRouter);
-
+app.get("/", (req, res) => {
+  res.send("EkagraAI Backend Running");
+});
 // Healthcheck
 app.get('/api/health', (req, res) => {
   res.json({ status: 'online', timestamp: new Date().toISOString() });
 });
+
 
 // Initialize database and start server
 async function startServer() {
@@ -41,7 +44,7 @@ async function startServer() {
     await initDatabase();
     const sequelize = getSequelize();
     defineModels();
-    
+
     // Sync models
     await sequelize.sync({ alter: true });
     console.log('[Database] Table schemas synchronized successfully.');
