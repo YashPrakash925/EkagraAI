@@ -1,4 +1,5 @@
 services:
+  # Backend Web Service
   - type: web
     name: ekagraai-backend
     env: node
@@ -14,3 +15,18 @@ services:
         value: yprakash_be24@thapar.edu,ppatel_be24@thapar.edu,tkhandelwal_be24@thapar.edu,ryadav3_be24@thapar.edu
       - key: ADMIN_DEFAULT_PASSWORD
         value: admin123
+
+  # Frontend Static Site
+  - type: web
+    name: ekagraai-frontend
+    env: static
+    rootDir: client
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_SERVER_BASE_URL
+        value: https://ekagraai-backend.onrender.com

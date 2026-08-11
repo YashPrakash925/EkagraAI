@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 const { initDatabase, getSequelize } = require('./config/db');
@@ -23,22 +24,34 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Register Routes
+// Register API Routes
 app.use('/api/auth', authRouter);
 app.use('/api/project', projectRouter);
 app.use('/api/changes', changesRouter);
 app.use('/api/ppt', pptRouter);
 app.use('/api/team', teamRouter);
-app.get("/", (req, res) => {
-  res.send("EkagraAI Backend Running");
-});
-// Healthcheck
+
+// Healthcheck & API Root Status
 app.get('/api/health', (req, res) => {
   res.json({ status: 'online', timestamp: new Date().toISOString() });
 });
-app.get('/api/', (req, res) => {
-  res.send("EkagraAI Backend Running");
+
+app.get('/api', (req, res) => {
+  res.json({ status: 'online', message: 'EkagraAI Backend Running' });
 });
+
+// Serve frontend production build if present
+const clientDistPath = path.join(__dirname, '..', 'client', 'dist');
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  });
+} else {
+  app.get('/', (req, res) => {
+    res.json({ status: 'online', message: 'EkagraAI Backend Service Running' });
+  });
+}
 
 // Initialize database and start server
 async function startServer() {
@@ -65,7 +78,8 @@ async function startServer() {
       console.log(`=================================================`);
     });
   } catch (err) {
-    console.error('Failed to start server:', err);
+    console.error('Failed starting server:', err);
+    process.exit(1);
   }
 }
 
