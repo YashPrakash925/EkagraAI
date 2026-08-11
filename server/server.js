@@ -36,7 +36,9 @@ app.get("/", (req, res) => {
 app.get('/api/health', (req, res) => {
   res.json({ status: 'online', timestamp: new Date().toISOString() });
 });
-
+app.get('/api/', (req, res) => {
+  res.send("EkagraAI Backend Running");
+});
 
 // Initialize database and start server
 async function startServer() {
