@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchPPT } from '../services/api';
+import { fetchPPT, SERVER_BASE } from '../services/api';
 
 export default function PPTViewPage() {
   const [pptMeta, setPptMeta] = useState(null);
@@ -64,7 +64,7 @@ export default function PPTViewPage() {
     );
   }
 
-  const fullPdfUrl = selectedPdfUrl.startsWith('http') ? selectedPdfUrl : `${window.location.origin}${selectedPdfUrl}`;
+  const fullPdfUrl = selectedPdfUrl.startsWith('http') ? selectedPdfUrl : `${SERVER_BASE}${selectedPdfUrl}`;
 
   return (
     <div style={{ height: 'calc(100vh - 120px)', maxHeight: '820px', width: '100%', maxWidth: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#000000', borderRadius: '8px', border: '1px solid #222222', overflow: 'hidden', boxSizing: 'border-box' }}>

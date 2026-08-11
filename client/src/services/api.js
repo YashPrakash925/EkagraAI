@@ -1,4 +1,5 @@
-const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
+export const SERVER_BASE = import.meta.env.VITE_SERVER_BASE_URL || 'https://ekagraai-backend.onrender.com';
+const API_BASE = `${SERVER_BASE}/api`;
 
 function getAuthHeader() {
   const token = localStorage.getItem('ekagra_admin_token');
