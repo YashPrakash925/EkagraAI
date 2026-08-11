@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { updatePPTSlides } from '../services/api';
+import { updatePPTSlides, SERVER_BASE } from '../services/api';
 import { toast } from 'react-toastify';
 import RichPPTViewer from './RichPPTViewer';
 
@@ -19,7 +19,8 @@ export default function PPTViewerModal({ pptData, pptList = [], onSelectPPT, onC
     if (pptData?.presentationName) {
       setPresentationName(pptData.presentationName);
     }
-    const targetUrl = pptData?.pptFile || pptData?.fileUrl || '/api/ppt/file';
+    const rawTarget = pptData?.pptFile || pptData?.fileUrl || '/api/ppt/file';
+    const targetUrl = rawTarget.startsWith('http') ? rawTarget : `${SERVER_BASE}${rawTarget}`;
     if (targetUrl) {
       fetch(targetUrl)
         .then((r) => {
